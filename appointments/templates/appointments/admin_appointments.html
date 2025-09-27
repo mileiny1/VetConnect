@@ -1,0 +1,17 @@
+<h2>All Appointments</h2>
+<ul>
+  {% for app in appointments %}
+    <li>
+      {{ app.pet }} with {{ app.vet }} on {{ app.appointment_date }} {{ app.appointment_time }}
+      - Status: {{ app.status }}
+
+      {% if app.status == "pending" %}
+        <a href="{% url 'appointments:approve_appointment' app.id %}">Approve</a>
+        <a href="{% url 'appointments:deny_appointment' app.id %}">Deny</a>
+      {% endif %}
+    </li>
+  {% empty %}
+    <li>No appointments found.</li>
+  {% endfor %}
+</ul>
+

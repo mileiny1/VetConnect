@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>VetConnect - My Appointments</title>
+ <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+ <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+ <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%234a7c59%22/><text x=%2250%22 y=%2265%22 font-size=%2260%22 text-anchor=%22middle%22 fill=%22white%22>🐾</text></svg>">
+
+
+
+ <style>
+ :root {
+ --primary-green: #2d5a27;
+ --light-green: #4a7c59;
+ --orange: #ff6b35;
+ --light-orange: #ff8c42;
+ --black: #1a1a1a;
+ --coffee-brown: #8b4513;
+ --light-coffee: #a0522d;
+ --cream: #f5f5dc;
+ --status-pending: #ffd54f;
+ --status-approved: #81c784;
+ --status-denied: #e57373;
+ }
+
+ body {
+ background: linear-gradient(135deg, var(--cream) 0%, #f0f8f0 100%);
+ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+ min-height: 100vh;
+ position: relative;
+ }
+
+ body::before {
+ content: '';
+ position: absolute;
+ top: 0;
+ left: 0;
+ right: 0;
+ bottom: 0;
+ background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="1" fill="%234a7c59" opacity="0.1"/><circle cx="80" cy="40" r="1.5" fill="%234a7c59" opacity="0.1"/><circle cx="40" cy="70" r="1" fill="%234a7c59" opacity="0.1"/></svg>') repeat;
+ animation: float 30s infinite linear;
+ z-index: -1;
+ }
+
+ @keyframes float {
+ 0% { transform: translateY(0px) translateX(0px); }
+ 25% { transform: translateY(-10px) translateX(5px); }
+ 50% { transform: translateY(-20px) translateX(0px); }
+ 75% { transform: translateY(-10px) translateX(-5px); }
+ 100% { transform: translateY(0px) translateX(0px); }
+ }
+
+ /* Navigation */
+ .navbar {
+ background: linear-gradient(90deg, var(--primary-green), var(--light-green));
+ box-shadow: 0 4px 15px rgba(45, 90, 39, 0.2);
+ padding: 1rem 0;
+ }
+
+ .navbar-brand {
+ font-weight: bold;
+ font-size: 1.5rem;
+ color: white !important;
+ transition: all 0.3s ease;
+ }
+
+ .navbar-brand:hover {
+ transform: scale(1.05);
+ }
+
+ .navbar-nav .nav-link {
+ color: white !important;
+ font-weight: 500;
+ padding: 0.5rem 1rem !important;
+ margin: 0 0.2rem;
+ border-radius: 8px;
+ transition: all 0.3s ease;
+ position: relative;
+ }
+
+ .navbar-nav .nav-link:hover {
+ background: rgba(255, 255, 255, 0.1);
+ transform: translateY(-2px);
+ }
+
+ .navbar-nav .nav-link.active {
+ background: var(--orange);
+ color: white !important;
+ }
+
+ .navbar-toggler {
+ border: none;
+ padding: 0.2rem 0.5rem;
+ }
+
+ .navbar-toggler:focus {
+ box-shadow: none;
+ }
+
+ .navbar-toggler-icon {
+ background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+ }
+
+ .btn-nav-book {
+ background: linear-gradient(45deg, var(--orange), var(--light-orange));
+ border: none;
+ color: white !important;
+ padding: 0.5rem 1.2rem;
+ font-weight: 600;
+ border-radius: 20px;
+ transition: all 0.3s ease;
+ text-decoration: none;
+ margin-left: 0.5rem;
+ }
+
+ .btn-nav-book:hover {
+ background: linear-gradient(45deg, var(--light-orange), var(--orange));
+ transform: translateY(-2px);
+ box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+ color: white !important;
+ }
+
+ /* Dropdown Menu Styling */
+ .dropdown-menu {
+ background: white;
+ border: none;
+ border-radius: 12px;
+ box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+ margin-top: 0.5rem;
+ }
+
+ .dropdown-item {
+ color: var(--black);
+ padding: 0.7rem 1.2rem;
+ font-weight: 500;
+ transition: all 0.3s ease;
+ }
+
+ .dropdown-item:hover {
+ background: var(--light-green);
+ color: white;
+ transform: translateX(5px);
+ }
+
+ .dropdown-divider {
+ border-color: var(--cream);
+ margin: 0.5rem 0;
+ }
+
+ /* Mobile Navigation Adjustments */
+ @media (max-width: 991px) {
+ .navbar-collapse {
+ background: rgba(45, 90, 39, 0.95);
+ border-radius: 10px;
+ margin-top: 1rem;
+ padding: 1rem;
+ }
+ 
+ .btn-nav-book {
+ margin-left: 0;
+ margin-top: 0.5rem;
+ display: block;
+ text-align: center;
+ }
+ 
+ .dropdown-menu {
+ background: rgba(255, 255, 255, 0.95);
+ backdrop-filter: blur(10px);
+ }
+ }
+
+ .paw-icon {
+ animation: bounce 2s infinite;
+ display: inline-block;
+ }
+
+ @keyframes bounce {
+ 0%, 100% { transform: translateY(0); }
+ 50% { transform: translateY(-5px); }
+ }
+
+ /* Main Container */
+ .main-container {
+ padding: 2rem 0;
+ }
+
+ .appointments-container {
+ background: white;
+ border-radius: 20px;
+ box-shadow: 0 20px 60px rgba(45, 90, 39, 0.15);
+ overflow: hidden;
+ margin: 2rem auto;
+ max-width: 1200px;
+ }
+
+ .appointments-header {
+ background: linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%);
+ color: white;
+ padding: 3rem 2rem;
+ text-align: center;
+ position: relative;
+ overflow: hidden;
+ }
+
+ .appointments-header::before {
+ content: '';
+ position: absolute;
+ top: 0;
+ left: 0;
+ right: 0;
+ bottom: 0;
+ background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M20 20 Q50 10 80 20 Q70 50 80 80 Q50 70 20 80 Q30 50 20 20" fill="white" opacity="0.05"/></svg>') repeat;
+ animation: floatSlow 40s infinite linear;
+ }
+
+ @keyframes floatSlow {
+ 0% { transform: translateY(0px); }
+ 100% { transform: translateY(-100px); }
+ }
+
+ .appointments-header-content {
+ position: relative;
+ z-index: 2;
+ }
+
+ .appointments-title {
+ font-size: 3rem;
+ font-weight: 700;
+ margin-bottom: 1rem;
+ text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+ }
+
+ .appointments-subtitle {
+ font-size: 1.2rem;
+ opacity: 0.9;
+ margin-bottom: 0;
+ }
+
+ .appointments-content {
+ padding: 3rem 2rem;
+ background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+ }
+
+ /* Status Filters */
+ .status-filters {
+ display: flex;
+ justify-content: center;
+ gap: 1rem;
+ margin-bottom: 2rem;
+ flex-wrap: wrap;
+ }
+
+ .filter-btn {
+ padding: 10px 20px;
+ border: 2px solid transparent;
+ border-radius: 25px;
+ font-weight: 600;
+ text-transform: uppercase;
+ letter-spacing: 0.5px;
+ transition: all 0.3s ease;
+ cursor: pointer;
+ font-size: 0.9rem;
+ }
+
+ .filter-btn.active {
+ transform: scale(1.05);
+ box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+ }
+
+ .filter-all {
+ background: var(--coffee-brown);
+ color: white;
+ }
+
+ .filter-all:hover, .filter-all.active {
+ background: var(--light-coffee);
+ border-color: var(--coffee-brown);
+ }
+
+ .filter-pending {
+ background: var(--status-pending);
+ color: var(--black);
+ }
+
+ .filter-pending:hover, .filter-pending.active {
+ background: #ffeb3b;
+ border-color: var(--status-pending);
+ }
+
+ .filter-approved {
+ background: var(--status-approved);
+ color: white;
+ }
+
+ .filter-approved:hover, .filter-approved.active {
+ background: #66bb6a;
+ border-color: var(--status-approved);
+ }
+
+ .filter-denied {
+ background: var(--status-denied);
+ color: white;
+ }
+
+ .filter-denied:hover, .filter-denied.active {
+ background: #ef5350;
+ border-color: var(--status-denied);
+ }
+
+ /* Appointment Cards */
+ .appointments-list {
+ display: grid;
+ gap: 1.5rem;
+ }
+
+ .appointment-card {
+ background: white;
+ border-radius: 15px;
+ padding: 2rem;
+ box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+ transition: all 0.3s ease;
+ border-left: 6px solid var(--coffee-brown);
+ position: relative;
+ overflow: hidden;
+ }
+
+ .appointment-card::before {
+ content: '';
+ position: absolute;
+ top: 0;
+ right: 0;
+ width: 100px;
+ height: 100px;
+ background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+ border-radius: 50%;
+ transform: translate(30px, -30px);
+ }
+
+ .appointment-card:hover {
+ transform: translateY(-5px);
+ box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+ }
+
+ /* Status-specific card styling */
+ .appointment-card.pending {
+ border-left-color: var(--status-pending);
+ background: linear-gradient(135deg, #fff9c4 0%, #ffffff 100%);
+ }
+
+ .appointment-card.approved {
+ border-left-color: var(--status-approved);
+ background: linear-gradient(135deg, #e8f5e8 0%, #ffffff 100%);
+ }
+
+ .appointment-card.denied {
+ border-left-color: var(--status-denied);
+ background: linear-gradient(135deg, #ffebee 0%, #ffffff 100%);
+ }
+
+ .appointment-header {
+ display: flex;
+ justify-content: between;
+ align-items: flex-start;
+ margin-bottom: 1.5rem;
+ flex-wrap: wrap;
+ gap: 1rem;
+ }
+
+ .appointment-info {
+ flex: 1;
+ }
+
+ .pet-name {
+ font-size: 1.4rem;
+ font-weight: 700;
+ color: var(--primary-green);
+ margin-bottom: 0.5rem;
+ display: flex;
+ align-items: center;
+ gap: 0.5rem;
+ }
+
+ .vet-name {
+ color: var(--coffee-brown);
+ font-weight: 600;
+ font-size: 1.1rem;
+ margin-bottom: 0.5rem;
+ }
+
+ .appointment-datetime {
+ display: flex;
+ gap: 2rem;
+ margin-bottom: 1rem;
+ flex-wrap: wrap;
+ }
+
+ .datetime-item {
+ display: flex;
+ align-items: center;
+ gap: 0.5rem;
+ color: var(--black);
+ }
+
+ .datetime-icon {
+ color: var(--orange);
+ }
+
+ .status-badge {
+ padding: 8px 16px;
+ border-radius: 20px;
+ font-weight: 600;
+ text-transform: uppercase;
+ letter-spacing: 0.5px;
+ font-size: 0.85rem;
+ display: inline-flex;
+ align-items: center;
+ gap: 0.5rem;
+ box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+ }
+
+ .status-pending {
+ background: var(--status-pending);
+ color: var(--black);
+ }
+
+ .status-approved {
+ background: var(--status-approved);
+ color: white;
+ }
+
+ .status-denied {
+ background: var(--status-denied);
+ color: white;
+ }
+
+ /* Empty State */
+ .empty-state {
+ text-align: center;
+ padding: 4rem 2rem;
+ color: var(--coffee-brown);
+ }
+
+ .empty-icon {
+ font-size: 4rem;
+ color: var(--orange);
+ margin-bottom: 1rem;
+ opacity: 0.7;
+ }
+
+ .empty-title {
+ font-size: 1.5rem;
+ font-weight: 600;
+ margin-bottom: 1rem;
+ }
+
+ .empty-description {
+ font-size: 1.1rem;
+ opacity: 0.8;
+ margin-bottom: 2rem;
+ }
+
+ .btn-book-new {
+ background: linear-gradient(45deg, var(--orange), var(--light-orange));
+ border: none;
+ color: white;
+ padding: 12px 30px;
+ font-size: 1rem;
+ font-weight: 600;
+ border-radius: 25px;
+ transition: all 0.3s ease;
+ box-shadow: 0 8px 25px rgba(255, 107, 53, 0.3);
+ text-transform: uppercase;
+ letter-spacing: 1px;
+ text-decoration: none;
+ display: inline-block;
+ }
+
+ .btn-book-new:hover {
+ background: linear-gradient(45deg, var(--light-orange), var(--orange));
+ transform: translateY(-2px);
+ box-shadow: 0 12px 35px rgba(255, 107, 53, 0.4);
+ color: white;
+ }
+
+ /* Book New Appointment Section */
+ .book-new-section {
+ margin-bottom: 2rem;
+ }
+
+ .book-new-card {
+ background: linear-gradient(135deg, var(--coffee-brown), var(--light-coffee));
+ border-radius: 15px;
+ padding: 2rem;
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ gap: 2rem;
+ box-shadow: 0 10px 30px rgba(139, 69, 19, 0.2);
+ transition: all 0.3s ease;
+ color: white;
+ }
+
+ .book-new-card:hover {
+ transform: translateY(-3px);
+ box-shadow: 0 15px 40px rgba(139, 69, 19, 0.3);
+ }
+
+ .book-new-content {
+ display: flex;
+ align-items: center;
+ gap: 1.5rem;
+ flex: 1;
+ }
+
+ .book-new-icon {
+ font-size: 3rem;
+ color: var(--orange);
+ animation: pulse 2s infinite;
+ }
+
+ @keyframes pulse {
+ 0% { transform: scale(1); opacity: 1; }
+ 50% { transform: scale(1.05); opacity: 0.8; }
+ 100% { transform: scale(1); opacity: 1; }
+ }
+
+ .book-new-text h4 {
+ margin-bottom: 0.5rem;
+ font-weight: 700;
+ font-size: 1.3rem;
+ }
+
+ .book-new-text p {
+ margin: 0;
+ opacity: 0.9;
+ font-size: 1rem;
+ }
+
+ .btn-book-another {
+ background: linear-gradient(45deg, var(--orange), var(--light-orange));
+ border: none;
+ color: white;
+ padding: 12px 24px;
+ font-size: 1rem;
+ font-weight: 600;
+ border-radius: 25px;
+ transition: all 0.3s ease;
+ box-shadow: 0 6px 20px rgba(255, 107, 53, 0.3);
+ text-transform: uppercase;
+ letter-spacing: 0.5px;
+ text-decoration: none;
+ display: inline-flex;
+ align-items: center;
+ white-space: nowrap;
+ }
+
+ .btn-book-another:hover {
+ background: linear-gradient(45deg, var(--light-orange), var(--orange));
+ transform: translateY(-2px);
+ box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+ color: white;
+ text-decoration: none;
+ }
+
+ .btn-book-another:active {
+ transform: translateY(0);
+ }
+
+ /* Statistics Cards */
+ .stats-container {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+ gap: 1.5rem;
+ margin-bottom: 2rem;
+ }
+
+ .stat-card {
+ background: white;
+ padding: 1.5rem;
+ border-radius: 12px;
+ text-align: center;
+ box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+ transition: transform 0.3s ease;
+ }
+
+ .stat-card:hover {
+ transform: translateY(-3px);
+ }
+
+ .stat-number {
+ font-size: 2rem;
+ font-weight: 700;
+ margin-bottom: 0.5rem;
+ }
+
+ .stat-label {
+ color: var(--coffee-brown);
+ font-weight: 500;
+ text-transform: uppercase;
+ letter-spacing: 0.5px;
+ font-size: 0.9rem;
+ }
+
+ .stat-card.pending .stat-number { color: #f57f17; }
+ .stat-card.approved .stat-number { color: #388e3c; }
+ .stat-card.denied .stat-number { color: #d32f2f; }
+ .stat-card.total .stat-number { color: var(--coffee-brown); }
+
+ @media (max-width: 768px) {
+ .appointments-title {
+ font-size: 2rem;
+ }
+ 
+ .appointments-content {
+ padding: 2rem 1rem;
+ }
+ 
+ .appointment-header {
+ flex-direction: column;
+ }
+ 
+ .appointment-datetime {
+ flex-direction: column;
+ gap: 1rem;
+ }
+ 
+ .status-filters {
+ flex-direction: column;
+ align-items: center;
+ }
+
+ .book-new-card {
+ flex-direction: column;
+ text-align: center;
+ gap: 1.5rem;
+ }
+
+ .book-new-content {
+ flex-direction: column;
+ text-align: center;
+ }
+
+ .btn-book-another {
+ width: 100%;
+ justify-content: center;
+ }
+ }
+
+ .fade-in {
+ animation: fadeIn 0.6s ease-out;
+ }
+
+ @keyframes fadeIn {
+ from { opacity: 0; transform: translateY(20px); }
+ to { opacity: 1; transform: translateY(0); }
+ }
+ </style>
+</head>
+<body>
+ <!-- Navigation -->
+ <nav class="navbar navbar-expand-lg navbar-dark">
+ <div class="container">
+ <a class="navbar-brand" href="/">
+ <i class="fas fa-paw paw-icon"></i> VetConnect
+ </a>
+ 
+ <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ 
+ <div class="collapse navbar-collapse" id="navbarNav">
+ <ul class="navbar-nav me-auto">
+ <li class="nav-item">
+ <a class="nav-link" href="/appointments/">
+ <i class="fas fa-home me-2"></i>Home
+ </a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link active" href="/appointments/my">
+ <i class="fas fa-calendar-alt me-2"></i>My Appointments
+ </a>
+ </li>
+ </ul>
+ 
+ <ul class="navbar-nav">
+ <!-- Show different nav items based on authentication status -->
+ {% if user.is_authenticated %}
+ <li class="nav-item">
+ <a class="nav-link" href="/appointments/book/">
+ <i class="fas fa-calendar-plus me-2"></i>Book Appointment
+ </a>
+ </li>
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <i class="fas fa-user-circle me-2"></i>{{ user.username|title }}
+ </a>
+ <ul class="dropdown-menu dropdown-menu-end">
+ <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profile</a></li>
+ <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
+ <li><hr class="dropdown-divider"></li>
+ <li><a class="dropdown-item" href="/appointments/logout/"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+ </ul>
+ </li>
+ {% else %}
+ <li class="nav-item">
+ <a class="nav-link" href="/appointments/login/">
+ <i class="fas fa-sign-in-alt me-2"></i>Login
+ </a>
+ </li>
+ <li class="nav-item">
+ <a href="/appointments/book/" class="btn-nav-book">
+ <i class="fas fa-calendar-plus me-2"></i>Book Appointment
+ </a>
+ </li>
+ {% endif %}
+ </ul>
+ </div>
+ </div>
+ </nav>
+
+ <!-- Main Content -->
+ <div class="main-container">
+ <div class="container">
+ <div class="appointments-container">
+ <!-- Header Section -->
+ <div class="appointments-header">
+ <div class="appointments-header-content">
+ <h2 class="appointments-title">
+ <i class="fas fa-calendar-alt me-3"></i>My Appointments
+ </h2>
+ <p class="appointments-subtitle">
+ Track and manage all your pet's veterinary appointments
+ </p>
+ </div>
+ </div>
+
+ <!-- Content Section -->
+ <div class="appointments-content">
+ <!-- Statistics Cards -->
+ <div class="stats-container">
+ <div class="stat-card total">
+ <div class="stat-number" id="total-count">5</div>
+ <div class="stat-label">Total Appointments</div>
+ </div>
+ <div class="stat-card pending">
+ <div class="stat-number" id="pending-count">2</div>
+ <div class="stat-label">Pending</div>
+ </div>
+ <div class="stat-card approved">
+ <div class="stat-number" id="approved-count">2</div>
+ <div class="stat-label">Approved</div>
+ </div>
+ <div class="stat-card denied">
+ <div class="stat-number" id="denied-count">1</div>
+ <div class="stat-label">Denied</div>
+ </div>
+ </div>
+
+ <!-- Status Filters -->
+ <div class="status-filters">
+ <div class="filter-btn filter-all active" data-status="all">
+ <i class="fas fa-list me-2"></i>All Appointments
+ </div>
+ <div class="filter-btn filter-pending" data-status="pending">
+ <i class="fas fa-clock me-2"></i>Pending
+ </div>
+ <div class="filter-btn filter-approved" data-status="approved">
+ <i class="fas fa-check-circle me-2"></i>Approved
+ </div>
+ <div class="filter-btn filter-denied" data-status="denied">
+ <i class="fas fa-times-circle me-2"></i>Denied
+ </div>
+ </div>
+
+ <!-- Book New Appointment Section -->
+ <div class="book-new-section">
+ <div class="book-new-card">
+ <div class="book-new-content">
+ <div class="book-new-icon">
+ <i class="fas fa-plus-circle"></i>
+ </div>
+ <div class="book-new-text">
+ <h4>Need Another Appointment?</h4>
+ <p>Book additional appointments for your pets anytime</p>
+ </div>
+ </div>
+ <a href="/appointments/book/" class="btn-book-another">
+ <i class="fas fa-calendar-plus me-2"></i>Book New Appointment
+ </a>
+ </div>
+ </div>
+
+ <!-- Appointments List -->
+ <div class="appointments-list">
+ {% for app in appointments %}
+ <div class="appointment-card {{ app.status|lower }} fade-in" data-status="{{ app.status|lower }}">
+ <div class="appointment-header">
+ <div class="appointment-info">
+ <div class="pet-name">
+ <i class="fas fa-paw"></i>
+ {{ app.pet }}
+ </div>
+ <div class="vet-name">
+ <i class="fas fa-user-md me-2"></i>Dr. {{ app.vet }}
+ </div>
+ </div>
+ <div class="status-badge status-{{ app.status|lower }}">
+ {% if app.status|lower == 'pending' %}
+ <i class="fas fa-clock"></i>
+ {% elif app.status|lower == 'approved' %}
+ <i class="fas fa-check-circle"></i>
+ {% else %}
+ <i class="fas fa-times-circle"></i>
+ {% endif %}
+ {{ app.status|title }}
+ </div>
+ </div>
+ 
+ <div class="appointment-datetime">
+ <div class="datetime-item">
+ <i class="fas fa-calendar datetime-icon"></i>
+ <span>{{ app.appointment_date|date:"F j, Y" }}</span>
+ </div>
+ <div class="datetime-item">
+ <i class="fas fa-clock datetime-icon"></i>
+ <span>{{ app.appointment_time|time:"g:i A" }}</span>
+ </div>
+ </div>
+ </div>
+ {% empty %}
+ <div class="empty-state">
+ <div class="empty-icon">
+ <i class="fas fa-calendar-times"></i>
+ </div>
+ <div class="empty-title">No Appointments Yet</div>
+ <div class="empty-description">
+ You haven't scheduled any appointments for your pets yet. Book your first appointment to get started!
+ </div>
+ <a href="/appointments/book/" class="btn-book-new">
+ <i class="fas fa-plus me-2"></i>Book New Appointment
+ </a>
+ </div>
+ {% endfor %}
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <!-- Bootstrap JS -->
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+ 
+ <!-- Custom JavaScript -->
+ <script>
+ document.addEventListener('DOMContentLoaded', function() {
+ const filterButtons = document.querySelectorAll('.filter-btn');
+ const appointmentCards = document.querySelectorAll('.appointment-card');
+ 
+ // Filter functionality
+ filterButtons.forEach(button => {
+ button.addEventListener('click', function() {
+ const filterStatus = this.getAttribute('data-status');
+ 
+ // Update active button
+ filterButtons.forEach(btn => btn.classList.remove('active'));
+ this.classList.add('active');
+ 
+ // Filter cards
+ appointmentCards.forEach(card => {
+ if (filterStatus === 'all' || card.getAttribute('data-status') === filterStatus) {
+ card.style.display = 'block';
+ card.classList.add('fade-in');
+ } else {
+ card.style.display = 'none';
+ }
+ });
+ 
+ // Update statistics
+ updateStats(filterStatus);
+ });
+ });
+ 
+ // Calculate and update statistics
+ function updateStats(filter = 'all') {
+ const visibleCards = document.querySelectorAll(filter === 'all' ? '.appointment-card' : `.appointment-card[data-status="${filter}"]`);
+ const totalCards = document.querySelectorAll('.appointment-card').length;
+ const pendingCards = document.querySelectorAll('.appointment-card[data-status="pending"]').length;
+ const approvedCards = document.querySelectorAll('.appointment-card[data-status="approved"]').length;
+ const deniedCards = document.querySelectorAll('.appointment-card[data-status="denied"]').length;
+ 
+ document.getElementById('total-count').textContent = totalCards;
+ document.getElementById('pending-count').textContent = pendingCards;
+ document.getElementById('approved-count').textContent = approvedCards;
+ document.getElementById('denied-count').textContent = deniedCards;
+ }
+ 
+ // Initialize statistics
+ updateStats();
+ 
+ // Add staggered animation to cards
+ appointmentCards.forEach((card, index) => {
+ card.style.animationDelay = `${index * 0.1}s`;
+ });
+ });
+
+ // Welcome message
+ console.log('🐾 VetConnect Appointments Dashboard Ready! 🐾');
+ </script>
+
+
+  <!-- Footer -->
+<footer class="footer text-light" style="background-color: #198754;">
+  <div class="container text-center py-2">
+    <p class="mb-0 small">
+      Made with <i class="fas fa-heart" style="color: var(--orange);"></i> by Mileiny Nolasco <br>
+      &copy; 2025 All rights reserved.
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>
+

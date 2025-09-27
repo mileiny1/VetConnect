@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VetConnect - Appointments</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%234a7c59%22/><text x=%2250%22 y=%2265%22 font-size=%2260%22 text-anchor=%22middle%22 fill=%22white%22>🐾</text></svg>">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Minimal Custom CSS for branding only -->
+    <style>
+        :root {
+            --bs-success: #2d5a27;
+            --bs-success-rgb: 45, 90, 39;
+            --bs-warning: #ff6b35;
+            --bs-warning-rgb: 255, 107, 53;
+        }
+        .bg-gradient-success { background: linear-gradient(135deg, #2d5a27, #4a7c59) !important; }
+        .bg-gradient-warning { background: linear-gradient(45deg, #ff6b35, #ff8c42) !important; }
+        .text-coffee { color: #8b4513 !important; }
+        .bg-coffee { background-color: #8b4513 !important; }
+        .border-coffee { border-color: #8b4513 !important; }
+        .paw-bounce { animation: bounce 2s infinite; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+    </style>
+</head>
+<body class="bg-light">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-gradient-success shadow">
+        <div class="container">
+            <a class="navbar-brand fw-bold fs-4" href="#">
+                <i class="fas fa-paw paw-bounce me-2"></i>VetConnect
+            </a>
+            
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item me-2">
+                        <a href="/appointments/register/" class="btn btn-outline-light rounded-pill">
+                            <i class="fas fa-user-plus me-2"></i>Register
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/appointments/login/" class="btn bg-gradient-warning text-white rounded-pill border-0">
+                            <i class="fas fa-sign-in-alt me-2"></i>Login
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-12">
+                <div class="bg-gradient-success text-white rounded-4 p-5 text-center shadow-lg">
+                    <h1 class="display-3 fw-bold mb-4">
+                        Welcome to VetConnect <i class="fas fa-paw paw-bounce"></i>
+                    </h1>
+                    <p class="lead fs-4 mb-4 opacity-75">
+                        Your trusted partner in pet healthcare - Book and manage your vet appointments with ease
+                    </p>
+                    <button class="btn bg-gradient-warning text-white btn-lg rounded-pill px-5 border-0 text-uppercase" onclick="handleLogin()">
+                        <i class="fas fa-sign-in-alt me-2"></i>Get Started
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="row mt-5 g-4">
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm border-0 border-top border-coffee border-5">
+                    <div class="card-body text-center p-4">
+                        <i class="fas fa-calendar-check text-coffee display-4 mb-3"></i>
+                        <h3 class="card-title text-success fw-bold">Easy Scheduling</h3>
+                        <p class="card-text text-muted">Book appointments 24/7 with our intuitive scheduling system. Choose your preferred time and vet with just a few clicks.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm border-0 border-top border-coffee border-5">
+                    <div class="card-body text-center p-4">
+                        <i class="fas fa-user-md text-coffee display-4 mb-3"></i>
+                        <h3 class="card-title text-success fw-bold">Expert Veterinarians</h3>
+                        <p class="card-text text-muted">Connect with certified and experienced veterinarians who care about your pet's health and well-being.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm border-0 border-top border-coffee border-5">
+                    <div class="card-body text-center p-4">
+                        <i class="fas fa-mobile-alt text-coffee display-4 mb-3"></i>
+                        <h3 class="card-title text-success fw-bold">Mobile Friendly</h3>
+                        <p class="card-text text-muted">Manage your appointments on the go with our responsive platform that works seamlessly on all devices.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="bg-coffee text-white rounded-4 p-5">
+                    <div class="row text-center">
+                        <div class="col-md-3 col-6 mb-3 mb-md-0">
+                            <div class="p-3">
+                                <span class="display-3 fw-bold text-warning d-block" data-count="5000">5000</span>
+                                <span class="fs-5 opacity-75">Happy Pets</span>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6 mb-3 mb-md-0">
+                            <div class="p-3">
+                                <span class="display-3 fw-bold text-warning d-block" data-count="150">150</span>
+                                <span class="fs-5 opacity-75">Expert Vets</span>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div class="p-3">
+                                <span class="display-3 fw-bold text-warning d-block" data-count="24">24</span>
+                                <span class="fs-5 opacity-75">Cities Served</span>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div class="p-3">
+                                <span class="display-3 fw-bold text-warning d-block" data-count="99">99</span>
+                                <span class="fs-5 opacity-75">Success Rate %</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gradient-success text-white mt-5">
+        <div class="container py-5">
+            <!-- Logo Section -->
+            <div class="text-center mb-4">
+                <a href="#" class="text-white text-decoration-none">
+                    <i class="fas fa-paw paw-bounce me-2 fs-1"></i>
+                    <span class="fs-2 fw-bold">VetConnect</span>
+                </a>
+            </div>
+
+            <!-- Newsletter Section -->
+            <div class="row justify-content-center mb-5">
+                <div class="col-md-8">
+                    <div class="bg-white bg-opacity-10 rounded-4 p-4 backdrop-blur">
+                        <h3 class="text-center fw-semibold mb-3">Stay Connected with Pet Care Updates</h3>
+                        <p class="text-center opacity-75 mb-4">Get the latest tips, health advice, and exclusive offers for your furry friends!</p>
+                        <form class="row g-3 justify-content-center" id="newsletterForm">
+                            <div class="col-auto flex-fill" style="max-width: 400px;">
+                                <input type="email" class="form-control form-control-lg bg-white bg-opacity-25 border-white border-opacity-25 text-white rounded-pill" 
+                                       placeholder="Enter your email address" required>
+                            </div>
+                            <div class="col-auto">
+                                <button type="submit" class="btn bg-gradient-warning text-white btn-lg rounded-pill border-0 text-uppercase px-4">
+                                    <i class="fas fa-paper-plane me-2"></i>Subscribe
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Social Media Section -->
+            <div class="text-center mb-5">
+                <h4 class="fw-semibold mb-4">Follow Us</h4>
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    <a href="#" class="btn btn-primary rounded-circle p-3" style="width: 60px; height: 60px;">
+                        <i class="fab fa-facebook-f fs-4"></i>
+                    </a>
+                    <a href="#" class="btn rounded-circle p-3 text-white" style="background: linear-gradient(45deg, #405de6, #833ab4, #fd1d1d); width: 60px; height: 60px;">
+                        <i class="fab fa-instagram fs-4"></i>
+                    </a>
+                    <a href="#" class="btn btn-success rounded-circle p-3" style="width: 60px; height: 60px;">
+                        <i class="fab fa-whatsapp fs-4"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="row g-4 mb-5">
+                <div class="col-md-3 col-sm-6">
+                    <div class="text-center p-3 bg-white bg-opacity-10 rounded-3 h-100">
+                        <i class="fas fa-map-marker-alt text-warning fs-2 mb-3"></i>
+                        <h5 class="fw-semibold">Visit Us</h5>
+                        <p class="mb-0 opacity-75">123 Pet Care Street<br>New York, New York</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="text-center p-3 bg-white bg-opacity-10 rounded-3 h-100">
+                        <i class="fas fa-phone text-warning fs-2 mb-3"></i>
+                        <h5 class="fw-semibold">Call Us</h5>
+                        <p class="mb-0 opacity-75">347-490-5020<br>Emergency: 347-490-5020</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="text-center p-3 bg-white bg-opacity-10 rounded-3 h-100">
+                        <i class="fas fa-envelope text-warning fs-2 mb-3"></i>
+                        <h5 class="fw-semibold">Email Us</h5>
+                        <p class="mb-0 opacity-75">info@vetconnect.com<br>support@vetconnect.com</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="text-center p-3 bg-white bg-opacity-10 rounded-3 h-100">
+                        <i class="fas fa-clock text-warning fs-2 mb-3"></i>
+                        <h5 class="fw-semibold">Working Hours</h5>
+                        <p class="mb-0 opacity-75">Mon-Fri: 8:00 AM - 8:00 PM<br>Sat-Sun: 9:00 AM - 6:00 PM</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="border-top border-white border-opacity-25 py-4 bg-dark bg-opacity-25">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <div class="d-flex flex-wrap justify-content-center justify-content-md-start gap-4 mb-3 mb-md-0">
+                            <a href="/about" class="text-white-50 text-decoration-none">About Us</a>
+                            <a href="/services" class="text-white-50 text-decoration-none">Services</a>
+                            <a href="/contact" class="text-white-50 text-decoration-none">Contact</a>
+                            <a href="/privacy" class="text-white-50 text-decoration-none">Privacy Policy</a>
+                            <a href="/terms" class="text-white-50 text-decoration-none">Terms of Service</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-center text-md-end">
+                        <p class="mb-0 opacity-75">
+                            <i class="fas fa-heart text-warning"></i>
+                            © 2025 Mileiny Nolasco | VetConnect
+                            <i class="fas fa-heart text-warning"></i>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Minimal JavaScript -->
+    <script>
+        function handleLogin() {
+            const btn = event.target;
+            const originalText = btn.innerHTML;
+            
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Connecting...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                window.location.href = '/appointments/login/';
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }, 1000);
+        }
+
+        // Newsletter form
+        document.getElementById('newsletterForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const input = this.querySelector('input[type="email"]');
+            const btn = this.querySelector('button');
+            const originalText = btn.innerHTML;
+            
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Subscribing...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                btn.innerHTML = '<i class="fas fa-check me-2"></i>Subscribed!';
+                btn.className = 'btn btn-success btn-lg rounded-pill border-0';
+                input.value = '';
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.className = 'btn bg-gradient-warning text-white btn-lg rounded-pill border-0 text-uppercase px-4';
+                    btn.disabled = false;
+                }, 3000);
+            }, 1500);
+        });
+
+        console.log('🐾 VetConnect Bootstrap Version Loaded! 🐾');
+    </script>
+</body>
+</html>
+
