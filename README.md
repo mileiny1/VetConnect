@@ -62,39 +62,47 @@ Open your browser and visit:
 
 http://127.0.0.1:8000/appointments/
 
+
+
+
+![alt text](../appointments/templates/static/images/projects5.png)
+
+
 📂 Project Structure
 
 vet-connect/
-│Migrations
-├── appointments/                 # App for handling appointments
-│   ├── templates/                # HTML templates ,CSS, boostrap, Javascript
+│── migrations/                     # Migration files for database changes
+│
+├── appointments/                   # App for handling appointments
+│   ├── templates/                   # HTML templates (Bootstrap, CSS, JS)
 │   │   ├── admin_appointment.html
-│   │   ├── appointments_index.html   # Home page
+│   │   ├── appointments_index.html  # Home page
 │   │   ├── book_appointment.html
 │   │   ├── login.html
 │   │   ├── my_appointment.html
 │   │   └── register.html
 │   │
-│   ├── static/images/            # Static files (images, CSS, JS)
-│   │init_py
-│   ├── admin.py. # customize and register your models with the Django admin site.
-│   ├── apps.py
-│   ├── forms.py. # To create the forms.
-│   ├── models.py. #Data base to make the migration to SQL.
-│   ├── tests.py
-│   ├── urls.py # all your routes to the project’s main 
-│   └── views.py  #Connect back end with frontend
+│   ├── static/images/               # Static files (images, CSS, JS)
+│   │
+│   ├── __init__.py
+│   ├── admin.py                     # Customize and register models with Django admin site
+│   ├── apps.py                      # App configuration
+│   ├── forms.py                     # Create forms
+│   ├── models.py                    # Database models (migrations to SQL)
+│   ├── tests.py                     # Test cases
+│   ├── urls.py                      # Routes for the appointments app
+│   └── views.py                     # Connect backend with frontend
 │
-├── vetconnect/                   # Main project configuration folder
-│   ├── settings.py
-│   ├── urls.py.                  #Call appointments app urls
-│   └── wsgi.py
+├── vetconnect/                      # Main project configuration folder
+│   ├── __init__.py
+│   ├── settings.py                  # Project settings
+│   ├── urls.py                      # Root routes, includes appointments app URLs
+│   └── wsgi.py                      # WSGI entry point
 │
-├── db.sqlite3                    # Database (default SQLite)
-├── manage.py                     # Django management script
-└── requirements.txt              # Python dependencies
+├── db.sqlite3                       # Default SQLite database
+├── manage.py                        # Django management script
+└── requirements.txt                 # Python dependencies
 
-![alt text](../appointments/templates/static/images/projects5.png)
 
 🤝 Contributing
 
